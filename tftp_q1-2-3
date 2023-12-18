@@ -73,8 +73,6 @@ void puttftpfunction(char *host, char *filename) {
 		NI_NUMERICHOST | NI_NUMERICSERV);
 		printf("ip : %s \n", host);
 	}
-
-	
     freeaddrinfo(res);
 	close(sock);
 }
