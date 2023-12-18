@@ -60,7 +60,6 @@ void gettftpfunction(char *host, char *filename) {
         if (rrq_wwq >= 4 && buffer[1] == 3) {
             uint16_t received_block_num = (bufferbc[2] << 8) | bufferbc[3];
 			if (received_block_num == block_num) {
-                // Write data to the file
                 fwrite(buffer + 4, 1, recv_len - 4, file);
                 bufferbc[0] = 0;
                 bufferbc[1] = 4;  
