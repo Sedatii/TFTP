@@ -1,0 +1,101 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+
+#define buf_size 512
+
+void gettftpfunction(char *host, char *filename) {
+	int sock;
+	char service[NI_MAXSERV];
+
+	
+	struct addrinfo hints = {
+        .ai_flags = 0,
+        .ai_family = AF_UNSPEC,
+        .ai_socktype = SOCK_STREAM, 
+        .ai_protocol = 0,
+        .ai_addrlen = 0,
+        .ai_addr = NULL,
+        .ai_canonname = NULL,
+		.ai_next = NULL
+    };
+	
+	struct addrinfo *res;
+	getaddrinfo(host, NULL, &hints, &res);
+	
+	sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    if (sock == -1) {
+		perror("socket error");
+		exit(EXIT_FAILURE);
+    }
+    
+	printf("socket :%d \n", sock);
+	getnameinfo(res->ai_addr, res->ai_addrlen, host, NI_MAXHOST, service, NI_MAXSERV, 
+	NI_NUMERICHOST | NI_NUMERICSERV);
+	printf("ip : %s \n", host);
+	
+	
+    freeaddrinfo(res);
+	close(sock);
+}
+
+void puttftpfunction(char *host, char *filename) {
+	int sock;
+	char service[NI_MAXSERV];
+	
+	struct addrinfo hints = {
+        .ai_flags = 0,
+        .ai_family = AF_UNSPEC,
+        .ai_socktype = SOCK_STREAM, 
+        .ai_protocol = 0,
+        .ai_addrlen = 0,
+        .ai_addr = NULL,
+        .ai_canonname = NULL,
+		.ai_next = NULL
+    };
+	
+	struct addrinfo *res;
+	getaddrinfo(host, NULL, &hints, &res);
+	
+	sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    if (sock == -1) {
+		perror("socket error");
+		exit(EXIT_FAILURE);
+    }
+    else {
+		printf("socket :%d \n", socket(res->ai_family, res->ai_socktype, res->ai_protocol));
+		getnameinfo(res->ai_addr, res->ai_addrlen, host, NI_MAXHOST, service, NI_MAXSERV, 
+		NI_NUMERICHOST | NI_NUMERICSERV);
+		printf("ip : %s \n", host);
+	}
+
+	
+    freeaddrinfo(res);
+	close(sock);
+}
+
+
+
+int main(int argc, char *argv[]) {
+	if (argc != 4) {
+		perror("argc error");
+		exit(EXIT_FAILURE);
+	}
+    char *host = argv[1];
+    char *filename = argv[3];
+
+	
+    gettftpfunction(host, filename);
+    puttftpfunction(host,filename);
+    
+    printf("host : %s \n", argv[1]);
+    printf("port : %s \n", argv[2]);
+    printf("file : %s \n", argv[3]);
+
+    return 0;
+}
